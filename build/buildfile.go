@@ -4,19 +4,28 @@ package main
 
 import (
 	"fmt"
-    "os"
+	"os"
+	"os/exec"
+	"runtime"
 
 	// mage:import
 	"github.com/magefile/mage/sh"
 )
 
 // Build compiles the code
+
 func Build() error {
 	fmt.Println("Building the project...")
-	if err := os.MkdirAll("bin", os.ModePerm); err != nil {
-		return err
+
+	binaryName := "../bin/olanta"
+	if runtime.GOOS == "windows" {
+		binaryName += ".exe"
 	}
-	return sh.RunV("go", "build", "-o", "bin/olanta", "../cmd/olanta")
+
+	cmd := exec.Command("go", "build", "-o", binaryName, "../cmd/olanta")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 // Test runs the tests
