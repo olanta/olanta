@@ -8,12 +8,19 @@ import (
 
 	"github.com/olanta/internal/helpers"
 	"github.com/olanta/internal/models"
+	"github.com/olanta/internal/utils"
 )
 
-type PythonScanner struct{}
+type PythonScanner struct {
+	rules models.Rules
+}
 
 func NewPythonScanner() *PythonScanner {
-	return &PythonScanner{}
+	rules, err := utils.LoadRules("rules/python_rules.yaml")
+	if err != nil {
+		helpers.Logger.Errorf("Error loading Python rules: %v", err)
+	}
+	return &PythonScanner{rules: rules}
 }
 
 func (s *PythonScanner) Scan(path string) []models.Issue {
@@ -51,16 +58,15 @@ func (s *PythonScanner) scanFile(filePath string) []models.Issue {
 	lineNumber := 1
 	for scanner.Scan() {
 		line := scanner.Text()
-		if strings.Contains(line, "import") && !s.isImportUsed(filePath, line) {
-			issues = append(issues, models.Issue{
-				Description: "Unused import statement",
-				Severity:    "warning",
-				File:        filePath,
-				Line:        lineNumber,
-			})
-		}
-		if strings.Contains(line, "def ") || strings.Contains(line, "class ") {
-			s.checkForUnusedVariables(filePath, line, lineNumber, &issues)
+		for _, rule := range s.rules.Rules {
+			if strings.Contains(line, rule.Pattern) {
+				issues = append(issues, models.Issue{
+					Description: rule.Description,
+					Severity:    rule.Severity,
+					File:        filePath,
+					Line:        lineNumber,
+				})
+			}
 		}
 		lineNumber++
 	}
@@ -70,23 +76,4 @@ func (s *PythonScanner) scanFile(filePath string) []models.Issue {
 	}
 
 	return issues
-}
-
-func (s *PythonScanner) checkForUnusedVariables(filePath, line string, lineNumber int, issues *[]models.Issue) {
-    // This function must be implemented to check unused variables
-	 // For simplicity, we added an example issue
-	if strings.Contains(line, "unused_variable") {
-		*issues = append(*issues, models.Issue{
-			Description: "Unused variable",
-			Severity:    "info",
-			File:        filePath,
-			Line:        lineNumber,
-		})
-	}
-}
-
-func (s *PythonScanner) isImportUsed(filePath, importLine string) bool {
-    // This function must be implemented to check if import is used in the file
-	// For simplicity, we return false to demonstrate how it works
-	return false
 }
