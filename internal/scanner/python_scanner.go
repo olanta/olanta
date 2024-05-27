@@ -7,9 +7,9 @@ import (
     "path/filepath"
     "strings"
 
-    "github.com/olanta/internal/indexer"
-    "github.com/olanta/internal/models"
-    "github.com/olanta/internal/utils"
+    "github.com/olanta/olanta/internal/indexer"
+    "github.com/olanta/olanta/internal/models"
+    "github.com/olanta/olanta/internal/utils"
 )
 
 type PythonScanner struct {

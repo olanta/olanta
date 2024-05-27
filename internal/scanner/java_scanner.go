@@ -6,10 +6,10 @@ import (
     "path/filepath"
     "strings"
 
-    "github.com/olanta/internal/helpers"
-    "github.com/olanta/internal/models"
-    "github.com/olanta/internal/utils"
-    "github.com/olanta/internal/indexer"
+    "github.com/olanta/olanta/internal/helpers"
+    "github.com/olanta/olanta/internal/models"
+    "github.com/olanta/olanta/internal/utils"
+    "github.com/olanta/olanta/internal/indexer"
 )
 
 type JavaScanner struct {

@@ -1,9 +1,9 @@
 package analyzer
 
 import (
-    "github.com/olanta/config"
-    "github.com/olanta/internal/helpers"
-    "github.com/olanta/internal/scanner"
+    "github.com/olanta/olanta/config"
+    "github.com/olanta/olanta/internal/helpers"
+    "github.com/olanta/olanta/internal/scanner"
 )
 
 type Analyzer struct {

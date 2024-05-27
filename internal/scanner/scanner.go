@@ -1,9 +1,9 @@
 package scanner
 
 import (
-    "github.com/olanta/config"
-    "github.com/olanta/internal/helpers"
-    "github.com/olanta/internal/models"
+    "github.com/olanta/olanta/config"
+    "github.com/olanta/olanta/internal/helpers"
+    "github.com/olanta/olanta/internal/models"
     "path/filepath"
 )
 

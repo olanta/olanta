@@ -2,8 +2,8 @@ package indexer
 
 import (
     "github.com/blevesearch/bleve/v2"
-    "github.com/olanta/internal/helpers"
-    "github.com/olanta/internal/models"
+    "github.com/olanta/olanta/internal/helpers"
+    "github.com/olanta/olanta/internal/models"
     "path/filepath"
 )
 
