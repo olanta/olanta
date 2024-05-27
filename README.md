@@ -23,12 +23,17 @@ To build Olanta, follow these steps:
     cd olanta
     ```
 
-2. Run the build script:
+2. **Fetch all dependencies and tidy the module files:**
+
     ```sh
-    go run build/main.go -d build
+    go mod tidy
     ```
 
-    This command compiles the Olanta project and prepares it for use.
+3. **Build the project using Mage:**
+
+    ```sh
+    mage -d build build
+    ```
 
 ### Running the Tool
 
