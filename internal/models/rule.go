@@ -1,11 +1,17 @@
 package models
 
-type Rule struct {
-    Pattern     string `yaml:"pattern"`
-    Description string `yaml:"description"`
-    Severity    string `yaml:"severity"`
+var JavaRules = Rules{
+    Rules: []Rule{
+        // Adicione aqui suas regras para Java
+        // Exemplo:
+        // {Pattern: "System.out.println", Description: "Avoid using System.out.println", Severity: "warning"},
+    },
 }
 
-type Rules struct {
-    Rules []Rule `yaml:"rules"`
+var PythonRules = Rules{
+    Rules: []Rule{
+        // Adicione aqui suas regras para Python
+        // Exemplo:
+        // {Pattern: "print(", Description: "Avoid using print statements", Severity: "warning"},
+    },
 }

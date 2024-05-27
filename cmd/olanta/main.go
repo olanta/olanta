@@ -30,22 +30,21 @@ func main() {
                 os.Exit(1)
             }
 
+            var scan scanner.Scanner
+
             switch language {
             case "java":
-                scanner := scanner.NewJavaScanner(index)
-                issues := scanner.Scan(path)
-                for _, issue := range issues {
-                    fmt.Printf("%+v\n", issue)
-                }
+                scan = scanner.NewJavaScanner(index)
             case "python":
-                scanner := scanner.NewPythonScanner(index)
-                issues := scanner.Scan(path)
-                for _, issue := range issues {
-                    fmt.Printf("%+v\n", issue)
-                }
+                scan = scanner.NewPythonScanner(index)
             default:
                 fmt.Printf("Unsupported language: %s\n", language)
                 os.Exit(1)
+            }
+
+            issues := scan.Scan(path)
+            for _, issue := range issues {
+                fmt.Printf("%+v\n", issue)
             }
         },
     }
