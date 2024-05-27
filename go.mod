@@ -1,4 +1,4 @@
-module github.com/olanta/olanta/olanta
+module github.com/olanta/olanta
 
 go 1.22
 
