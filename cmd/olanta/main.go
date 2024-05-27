@@ -1,31 +1,58 @@
 package main
 
 import (
-    "github.com/olanta/internal/indexer"
-    "github.com/olanta/internal/scanner"
-    "github.com/olanta/internal/utils"
-    "log"
+    "fmt"
+    "os"
+
+    "github.com/spf13/cobra"
+    "github.com/olanta/olanta/internal/indexer"
+    "github.com/olanta/olanta/internal/scanner"
+    "github.com/olanta/olanta/internal/helpers"
 )
 
 func main() {
-    // Initialize the indexer
-    idx, err := indexer.NewIndexer(indexer.IndexPath)
-    if err != nil {
-        log.Fatalf("Erro ao inicializar o indexador: %v", err)
+    rootCmd := &cobra.Command{
+        Use:   "olanta",
+        Short: "Olanta is a static code analysis tool to find code smells and bugs.",
     }
 
-    // Initialize scanners for Java and Python
-    javaScanner := scanner.NewJavaScanner(idx)
-    pythonScanner := scanner.NewPythonScanner(idx)
+    scanCmd := &cobra.Command{
+        Use:   "scan [language] [path]",
+        Short: "Scan the specified path for code smells and bugs.",
+        Args:  cobra.ExactArgs(2),
+        Run: func(cmd *cobra.Command, args []string) {
+            language := args[0]
+            path := args[1]
 
-    // Path of the project to be analyzed
-    projectPath := "path/to/your/project"
+            index, err := indexer.NewIndexer(indexer.IndexPath)
+            if err != nil {
+                helpers.Logger.Errorf("Error creating indexer: %v", err)
+                os.Exit(1)
+            }
 
-    // Run the analysis
-    javaIssues := javaScanner.Scan(projectPath)
-    pythonIssues := pythonScanner.Scan(projectPath)
+            switch language {
+            case "java":
+                scanner := scanner.NewJavaScanner(index)
+                issues := scanner.Scan(path)
+                for _, issue := range issues {
+                    fmt.Printf("%+v\n", issue)
+                }
+            case "python":
+                scanner := scanner.NewPythonScanner(index)
+                issues := scanner.Scan(path)
+                for _, issue := range issues {
+                    fmt.Printf("%+v\n", issue)
+                }
+            default:
+                fmt.Printf("Unsupported language: %s\n", language)
+                os.Exit(1)
+            }
+        },
+    }
 
-    // Log the results
-    utils.Logger.Infof("Java Issues: %v", javaIssues)
-    utils.Logger.Infof("Python Issues: %v", pythonIssues)
+    rootCmd.AddCommand(scanCmd)
+    if err := rootCmd.Execute(); err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
 }
