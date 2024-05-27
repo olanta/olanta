@@ -1,14 +1,15 @@
 package helpers
 
 import (
-    "github.com/sirupsen/logrus"
+    "go.uber.org/zap"
+    "go.uber.org/zap/zapcore"
 )
 
-var Logger = logrus.New()
+var Logger *zap.SugaredLogger
 
 func init() {
-    Logger.SetFormatter(&logrus.TextFormatter{
-        FullTimestamp: true,
-    })
-    Logger.SetLevel(logrus.InfoLevel)
+    config := zap.NewDevelopmentConfig()
+    config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+    logger, _ := config.Build()
+    Logger = logger.Sugar()
 }
