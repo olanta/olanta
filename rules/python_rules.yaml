@@ -1,0 +1,7 @@
+rules:
+  - description: "Unused import statement"
+    pattern: "import"
+    severity: "warning"
+  - description: "Unused variable"
+    pattern: "unused_variable"
+    severity: "info"

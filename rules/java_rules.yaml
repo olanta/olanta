@@ -1,0 +1,7 @@
+rules:
+  - description: "Unused import statement"
+    pattern: "import"
+    severity: "warning"
+  - description: "Possible null pointer dereference"
+    pattern: "null"
+    severity: "critical"
