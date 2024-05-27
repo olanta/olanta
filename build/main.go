@@ -1,9 +1,14 @@
+// +build ignore
+
 package main
 
 import (
-    "os"
+	"os"
 
-    "github.com/magefile/mage/mage"
+	"github.com/magefile/mage/mage"
 )
 
-func main() { os.Exit(mage.Main()) }
+func main() {
+	os.Exit(mage.Main())
+}
+s

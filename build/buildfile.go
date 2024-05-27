@@ -1,26 +1,26 @@
+// +build mage
+
 package main
 
 import (
-    "fmt"
+	"fmt"
     "os"
 
-    "github.com/magefile/mage/mg"
-    "github.com/magefile/mage/sh"
+	// mage:import
+	"github.com/magefile/mage/sh"
 )
 
+// Build compiles the code
 func Build() error {
-    fmt.Println("Building the project...")
-    return sh.RunV("go", "build", "-o", "olanta", "./cmd/olanta")
+	fmt.Println("Building the project...")
+	if err := os.MkdirAll("bin", os.ModePerm); err != nil {
+		return err
+	}
+	return sh.RunV("go", "build", "-o", "bin/olanta", "../cmd/olanta")
 }
 
+// Test runs the tests
 func Test() error {
-    fmt.Println("Running tests...")
-    return sh.RunV("go", "test", "./...")
+	fmt.Println("Running tests...")
+	return sh.RunV("go", "test", "./...")
 }
-
-func Clean() error {
-    fmt.Println("Cleaning build artifacts...")
-    return os.RemoveAll("olanta")
-}
-
-var Default = Build
