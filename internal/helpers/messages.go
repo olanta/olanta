@@ -1,6 +1,6 @@
 package helpers
 
 const (
-    MsgStartAnalysis = "Starting code analysis"
-    MsgEndAnalysis   = "Code analysis finished"
+    ErrLoadingRules = "Error loading rules: %v"
+    ErrReadingFile  = "Error reading file: %v"
 )
