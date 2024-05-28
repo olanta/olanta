@@ -11,7 +11,7 @@ service ScannerService {
 message ScanRequest {
     string language = 1;
     string path = 2;
-    repeated Issue issues = 3; // Adicione este campo
+    repeated Issue issues = 3;
 }
 
 message ScanResponse {
