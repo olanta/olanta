@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"os"
-
 	"gopkg.in/yaml.v2"
 )
 
@@ -14,16 +12,6 @@ type Rule struct {
 
 type RulesConfig struct {
 	Rules []Rule `yaml:"rules"`
-}
-
-func LoadRulesFromFile(filepath string) (RulesConfig, error) {
-	var rules RulesConfig
-	data, err := os.ReadFile(filepath)
-	if err != nil {
-		return rules, err
-	}
-	err = yaml.Unmarshal(data, &rules)
-	return rules, err
 }
 
 func LoadRules(data []byte) (RulesConfig, error) {
