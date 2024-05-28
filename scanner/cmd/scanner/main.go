@@ -42,7 +42,11 @@ func main() {
 				os.Exit(1)
 			}
 
-			submitIssues(coreURL, issues)
+			if err := submitIssues(coreURL, issues); err != nil {
+				fmt.Printf("Error submitting issues: %v\n", err)
+				fmt.Println("Printing issues:")
+				printIssues(issues)
+			}
 		},
 	}
 
@@ -54,24 +58,32 @@ func main() {
 	}
 }
 
-func submitIssues(url string, issues []models.Issue) {
+func submitIssues(url string, issues []models.Issue) error {
 	jsonData, err := json.Marshal(issues)
 	if err != nil {
-		fmt.Printf("Error marshalling issues: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("error marshalling issues: %v", err)
 	}
 
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
-		fmt.Printf("Error submitting issues: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("error submitting issues: %v", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		fmt.Printf("Failed to submit issues: %s\n", resp.Status)
-		os.Exit(1)
+		return fmt.Errorf("failed to submit issues: %s", resp.Status)
 	}
 
 	fmt.Println("Issues submitted successfully")
+	return nil
+}
+
+func printIssues(issues []models.Issue) {
+	for _, issue := range issues {
+		fmt.Printf("Description: %s\n", issue.Description)
+		fmt.Printf("Severity: %s\n", issue.Severity)
+		fmt.Printf("File: %s\n", issue.File)
+		fmt.Printf("Line: %d, Column: %d\n", issue.Line, issue.Column)
+		fmt.Println("----")
+	}
 }
