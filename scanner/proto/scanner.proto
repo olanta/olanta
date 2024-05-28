@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/olanta/olanta/scanner/proto";
+
+service ScannerService {
+    rpc Scan (ScanRequest) returns (ScanResponse);
+}
+
+message ScanRequest {
+    string language = 1;
+    string path = 2;
+    repeated Issue issues = 3; // Adicione este campo
+}
+
+message ScanResponse {
+    string message = 1;
+}
+
+message Issue {
+    string description = 1;
+    string severity = 2;
+    string file = 3;
+    int32 line = 4;
+    int32 column = 5;
+}
