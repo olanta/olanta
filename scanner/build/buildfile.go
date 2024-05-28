@@ -8,6 +8,11 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+<<<<<<< HEAD
+=======
+
+	"github.com/magefile/mage/sh"
+>>>>>>> c70ed4069f3a5a7de32d871e737c367d02451ea3
 )
 
 // Build builds the scanner project.
