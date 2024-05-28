@@ -1,5 +1,5 @@
 
-Agora vamos nos ater ao core que segue esta estrutura aqui:
+
 
 core/
     cmd/
@@ -44,6 +44,9 @@ scanner/
             scanner.go
             java_scanner.go
             python_scanner.go
+            rules.go
+        models/
+            models.go
         utils/
             yaml_loader.go
     build/
