@@ -8,10 +8,10 @@ import (
 //go:embed rules/*
 var embeddedRules embed.FS
 
-func LoadEmbeddedRules(filename string) ([]byte, error) {
-	data, err := embeddedRules.ReadFile(filename)
+func LoadEmbeddedRules(fileName string) ([]byte, error) {
+	data, err := embeddedRules.ReadFile(fileName)
 	if err != nil {
-		return nil, fmt.Errorf("error loading embedded rules: %w", err)
+		return nil, fmt.Errorf("error loading embedded rule file %s: %w", fileName, err)
 	}
 	return data, nil
 }
