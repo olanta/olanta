@@ -1,14 +1,17 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
-	"net/http"
 	"os"
+	"time"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/olanta/olanta/scanner/internal/models"
 	"github.com/olanta/olanta/scanner/internal/scanner"
+	"github.com/olanta/olanta/scanner/proto"
 	"github.com/spf13/cobra"
 )
 
@@ -44,13 +47,14 @@ func main() {
 
 			if err := submitIssues(coreURL, issues); err != nil {
 				fmt.Printf("Error submitting issues: %v\n", err)
-				fmt.Println("Printing issues:")
 				printIssues(issues)
+			} else {
+				fmt.Println("Issues submitted successfully")
 			}
 		},
 	}
 
-	scanCmd.Flags().StringVar(&coreURL, "core-url", "http://localhost:8080/submit", "URL of the Olanta core server")
+	scanCmd.Flags().StringVar(&coreURL, "core-url", "localhost:8080", "URL of the Olanta core server")
 	rootCmd.AddCommand(scanCmd)
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -58,27 +62,46 @@ func main() {
 	}
 }
 
-func submitIssues(url string, issues []models.Issue) error {
-	jsonData, err := json.Marshal(issues)
+func submitIssues(coreURL string, issues []models.Issue) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	conn, err := grpc.DialContext(ctx, coreURL, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
-		return fmt.Errorf("error marshalling issues: %v", err)
+		return fmt.Errorf("could not connect: %v", err)
+	}
+	defer conn.Close()
+
+	client := proto.NewScannerServiceClient(conn)
+	ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	var protoIssues []*proto.Issue
+	for _, issue := range issues {
+		protoIssues = append(protoIssues, &proto.Issue{
+			Description: issue.Description,
+			Severity:    issue.Severity,
+			File:        issue.File,
+			Line:        int32(issue.Line),
+			Column:      int32(issue.Column),
+		})
 	}
 
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	_, err = client.Scan(ctx, &proto.ScanRequest{
+		Language: "java",
+		Path:     "path",
+		Issues:   protoIssues,
+	})
+
 	if err != nil {
-		return fmt.Errorf("error submitting issues: %v", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("failed to submit issues: %s", resp.Status)
+		return fmt.Errorf("could not submit issues: %v", err)
 	}
 
-	fmt.Println("Issues submitted successfully")
 	return nil
 }
 
 func printIssues(issues []models.Issue) {
+	fmt.Println("Printing issues:")
 	for _, issue := range issues {
 		fmt.Printf("Description: %s\n", issue.Description)
 		fmt.Printf("Severity: %s\n", issue.Severity)
