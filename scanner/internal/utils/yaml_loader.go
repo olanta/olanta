@@ -1,8 +1,6 @@
 package utils
 
-import (
-    "gopkg.in/yaml.v2"
-)
+import "gopkg.in/yaml.v2"
 
 type Rule struct {
     Pattern     string `yaml:"pattern"`
