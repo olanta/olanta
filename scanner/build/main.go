@@ -1,8 +1,14 @@
-// +build mage
+//go:build ignore
+// +build ignore
 
 package main
 
 import (
-	// mage:import
-	_ "github.com/olanta/olanta/scanner/build"
+	"os"
+
+	"github.com/magefile/mage/mage"
 )
+
+func main() {
+	os.Exit(mage.Main())
+}

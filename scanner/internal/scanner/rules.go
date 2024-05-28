@@ -1,9 +1,17 @@
 package scanner
 
-import _ "embed"
+import (
+	"embed"
+	"fmt"
+)
 
-//go:embed rules/java_rules.yaml
-var javaRulesYAML []byte
+//go:embed rules/*
+var embeddedRules embed.FS
 
-//go:embed rules/python_rules.yaml
-var pythonRulesYAML []byte
+func LoadEmbeddedRules(filename string) ([]byte, error) {
+	data, err := embeddedRules.ReadFile(filename)
+	if err != nil {
+		return nil, fmt.Errorf("error loading embedded rules: %w", err)
+	}
+	return data, nil
+}
