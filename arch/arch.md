@@ -1,8 +1,8 @@
 
 
-![arch](../arch.png)
+![arch](./arch.png)
 
-![diagram-sequence](../diagram-sequence.png)
+![diagram-sequence](./diagram-sequence.png)
 
 1. **Scanner Collects and Sends Data:**
    The Olanta Scanner collects data from the analyses and sends it to the Olanta Core via gRPC.
