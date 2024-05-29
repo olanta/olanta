@@ -5,7 +5,7 @@ go 1.22
 require (
 	github.com/blevesearch/bleve/v2 v2.3.4
 	github.com/google/uuid v1.1.2
-	google.golang.org/grpc v1.43.0
+	google.golang.org/grpc v1.56.3
 	google.golang.org/protobuf v1.27.1
 )
 
@@ -33,7 +33,7 @@ require (
 	github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede // indirect
 	github.com/mschoch/smat v0.2.0 // indirect
 	go.etcd.io/bbolt v1.3.5 // indirect
-	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
+	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
