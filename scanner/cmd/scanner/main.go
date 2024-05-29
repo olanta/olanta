@@ -30,7 +30,7 @@ func main() {
 		},
 	}
 
-	scanCmd.Flags().StringVar(&coreURL, "core-url", "http://localhost:8080/submit", "URL of the Olanta core server")
+	scanCmd.Flags().StringVar(&coreURL, "core-url", "localhost:8080", "URL of the Olanta core server")
 	rootCmd.AddCommand(scanCmd)
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
